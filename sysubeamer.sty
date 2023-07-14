@@ -1,0 +1,405 @@
+\ProvidesPackage{sysubeamer}[2023/07/15 Beamer Theme for Sun Yat-sen University School of Physics and Astronomy by He-Wen Yang.]
+
+\newcommand{\sysu@error}[1]{%
+    \PackageError{sysubeamer}{#1}{}%
+}
+\newcommand{\sysu@warning}[1]{%
+    \PackageWarning{sysubeamer}{#1}%
+}
+
+\geometry{paperwidth=160mm, paperheight=90mm}
+
+% declare options
+\RequirePackage{kvoptions}
+\RequirePackage{xstring}
+\RequirePackage{etoolbox}
+\SetupKeyvalOptions{%
+    family  = sysu,
+    prefix  = sysu@,
+    setkeys = \kvsetkeys
+}
+\DeclareBoolOption[true]{light}
+\DeclareComplementaryOption{dark}{light}
+\DeclareStringOption[light]{theme}[light]
+
+\DeclareBoolOption[false]{green}
+\DeclareBoolOption[false]{red}
+\DeclareBoolOption[false]{black}
+\DeclareBoolOption[false]{spablue}
+\DeclareStringOption{color}
+
+\DeclareStringOption{tpage}
+
+\ProcessKeyvalOptions*
+
+% option logic
+\IfStrEq{\sysu@theme}{light}{\sysu@lighttrue}{%
+    \IfStrEq{\sysu@theme}{dark}{\sysu@darktrue}{%
+        \sysu@warning{Invalid theme option, set to defualt: 'light'}
+    }
+}
+\IfStrEq{\sysu@color}{sysugreen}{\sysu@greentrue}{%
+    \IfStrEq{\sysu@color}{sysured}{\sysu@redtrue}{%
+        \IfStrEq{\sysu@color}{sysublack}{\sysu@blacktrue}{%
+            \IfStrEq{\sysu@color}{spablue}{\sysu@spabluetrue}{%
+                \ifboolexpr{bool{sysu@green} or bool{sysu@red} or bool{sysu@black} or bool{sysu@spablue}}{\relax}
+                {\sysu@greentrue \sysu@warning{Invalid color option, set to defualt: 'sysugreen'}}
+            }
+        }
+    }
+}
+
+% packages
+\RequirePackage{xcolor}
+\RequirePackage{graphicx}
+\RequirePackage{amsmath,amssymb,amsfonts}
+\RequirePackage{mathrsfs}
+\RequirePackage{bm}
+\RequirePackage{booktabs}
+\RequirePackage{subcaption}
+\RequirePackage{multicol,multirow}
+\RequirePackage{listings}
+\RequirePackage{hyperref}
+
+
+% colors define
+\definecolor{spablue}{RGB}{45,52,83}
+\definecolor{sysugreen}{RGB}{0,86,32}
+\definecolor{sysured}{RGB}{115,2,5}
+
+ % colors of the seven elements from Genshin Impact
+\definecolor{gsanemo}{RGB}{53,150,151}
+\definecolor{gsgeo}{RGB}{222,189,108}
+\definecolor{gselectro}{RGB}{148,93,196}
+\definecolor{gsdentro}{RGB}{102,173,22}
+\definecolor{gshydro}{RGB}{0,191,255}
+\definecolor{gspyro}{RGB}{236,73,35}
+\definecolor{gscryo}{RGB}{70,130,180}
+
+% color options
+\ifsysu@green
+    \def\themecolor{sysugreen}
+    \def\logo{logo/sysu_logo_white.png}
+    \def\darklogo{logo/sysu_logo.png}
+    \def\motto{logo/motto.png}
+    \def\horizontal{logo/sysu_horizontal.png}
+    \def\vertical{logo/sysu_vertical.png}
+    \def\updown{logo/sysu_updown.png}
+\else\ifsysu@red
+    \def\themecolor{sysured}
+    \def\logo{logo/sysu_logo_white.png}
+    \def\darklogo{logo/sysu_logo_red.png}
+    \def\motto{logo/motto.png}
+    \def\horizontal{logo/sysu_horizontal_red.png}
+    \def\vertical{logo/sysu_vertical_red.png}
+    \def\updown{logo/sysu_updown_red.png}
+\else\ifsysu@black
+    \def\themecolor{black}
+    \def\logo{logo/sysu_logo_white.png}
+    \def\darklogo{logo/sysu_logo_black.png}
+    \def\motto{logo/motto.png}
+    \def\horizontal{logo/sysu_horizontal_black.png}
+    \def\vertical{logo/sysu_vertical_black.png}
+    \def\updown{logo/sysu_updown_black.png}
+\else\ifsysu@spablue
+    \def\themecolor{spablue}
+    \def\logo{logo/spa_logo_white.png}
+    \def\darklogo{logo/spa_logo.png}
+    \def\motto{logo/motto.png}
+    \def\horizontal{logo/spa_horizontal.png}
+    \def\vertical{logo/spa_vertical.png}
+    \def\updown{logo/spa_updown.png}
+\fi
+\fi
+\fi
+\fi
+
+% light or dark option, and beamer colors setting
+\ifsysu@light
+    \def\fgcolor{white}
+    \def\bgcolor{\themecolor}
+    \setbeamercolor{sysucolorbox}{fg=\fgcolor,bg=\bgcolor}
+\else
+    \def\fgcolor{\themecolor}
+    \def\bgcolor{white}
+    \setbeamercolor{sysucolorbox}{fg=\fgcolor,bg=\bgcolor}
+    \setbeamercolor{background canvas}{bg=\themecolor}
+    \setbeamercolor{normal text}{fg=white,bg=\themecolor}
+    \def\logo{\darklogo}
+    \def\motto{logo/motto_white.png}
+    \ifsysu@spablue
+        \def\horizontal{logo/spa_horizontal_white.png}
+        \def\vertical{logo/spa_vertical_white.png}
+        \def\updown{logo/spa_updown_white.png}
+    \else
+        \def\horizontal{logo/sysu_horizontal_white.png}
+        \def\vertical{logo/sysu_vertical_white.png}
+        \def\updown{logo/sysu_updown_white.png}
+    \fi
+\fi
+\fi
+
+\setbeamercolor{title}{fg=\fgcolor}
+\setbeamercolor{frametitle}{fg=\fgcolor}
+\setbeamercolor{author}{fg=\bgcolor}
+\setbeamercolor{date}{fg=\bgcolor}
+\setbeamercolor{block title}{fg=\bgcolor}
+\setbeamercolor{itemize item}{fg=\bgcolor}
+\setbeamercolor{itemize subitem}{fg=\bgcolor}
+\setbeamercolor{toccolor}{fg=\bgcolor}
+\hypersetup{
+    colorlinks,
+    linkcolor=\bgcolor,
+    anchorcolor=\fgcolor!50!\bgcolor,
+    citecolor=\fgcolor!50!\bgcolor,
+    urlcolor=\fgcolor!50!\bgcolor,
+}
+
+% fonts
+\setbeamerfont{author}{size=\normalsize}
+\setbeamerfont{school}{size=\small}
+\setbeamerfont{date}{size=\small}
+\setbeamerfont{title}{series=\bfseries,size=\Large}
+\setbeamerfont{subtitle}{series=\bfseries,size=\large}
+\setbeamerfont{frametitle}{series=\bfseries,size=\Large}
+\setbeamerfont{framesubtitle}{series=\mdseries,size=\large}
+\setbeamerfont{footline}{size=\tiny}
+\setbeamerfont{section in toc}{size=\normalsize}
+\usefonttheme{serif}
+\captionsetup{font=footnotesize}
+
+% beamertmeplate
+
+\def\school{\institute}
+
+% title pages seting
+\setlength{\unitlength}{1mm}
+\def\tpage@normal{%
+    \begin{picture}(0,0)
+	\put(0,10){
+            \begin{beamercolorbox}[wd=\paperwidth,sep=5mm,center]{empty}
+                \includegraphics[height=0.25\paperheight]{\horizontal}
+            \end{beamercolorbox}
+        }
+        \put(0,-6){%
+            \begin{beamercolorbox}[wd=0.9\paperwidth,sep=3.0mm]{sysucolorbox}
+                \centering
+                \usebeamerfont{title}\usebeamercolor[fg]{title}\inserttitle\par
+                {\if\insertsubtitle
+                \vspace{2.5mm}
+                \usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle
+                \fi}
+            \end{beamercolorbox}
+        }
+        \put(0,-36){%
+            \begin{beamercolorbox}[wd=0.9\paperwidth,sep=10pt]{empty}
+                \centering
+                \usebeamercolor[fg]{author}
+    		\usebeamerfont{author}\insertauthor\par
+                \vspace{2.0mm}
+                \usebeamerfont{school}\insertinstitute\par
+                \vspace{2.0mm}
+                \usebeamerfont{date}\insertdate
+            \end{beamercolorbox}
+	}
+    \end{picture}
+}
+\def\tpage@goldensplit{%
+    \begin{picture}(0,0)
+        \put(-10,-46){%
+            \begin{beamercolorbox}[wd=0.618\paperwidth,ht=1.02\paperheight,center]{sysucolorbox}
+            \end{beamercolorbox}
+        }
+        \put(0,-34){%
+            \begin{beamercolorbox}[wd=0.5\paperwidth,ht=0.5\paperheight,left]{empty}
+                \usebeamerfont{title}\usebeamercolor[fg]{title}\inserttitle\par
+                \vspace{3.0mm}
+                \usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle\par
+                \vspace{10.0mm}
+                \usebeamercolor[fg]{white}
+                \insertauthor\par
+                \vspace{3.0mm}
+                \usebeamerfont{school}\insertinstitute\par
+                \vspace{2.0mm}
+                \usebeamerfont{date}\insertdate
+            \end{beamercolorbox}
+        }
+        \put(90,-6){
+            \begin{beamercolorbox}[wd=0.382\paperwidth,center]{empty}
+                \includegraphics[height=0.4\paperheight]{\updown}
+            \end{beamercolorbox}
+        }
+        \put(90,-38){
+            \begin{beamercolorbox}[wd=0.382\paperwidth,center]{empty}
+                \includegraphics[width=0.3\paperwidth]{\motto}
+            \end{beamercolorbox}
+        }
+    \end{picture}
+}
+\def\tpage@box{%
+    \begin{picture}(0,0)
+        \put(0,-45){%
+            \begin{beamercolorbox}[wd=\paperwidth,ht=0.25\paperheight,sep=2.0mm,center]{empty}
+            \end{beamercolorbox}
+        }
+        \put(0,23){%
+            \begin{beamercolorbox}[wd=\paperwidth,ht=0.25\paperheight,center]{empty}
+            \end{beamercolorbox}
+        }
+        \put(0,-23){%
+            \begin{beamercolorbox}[wd=0.7\paperwidth,ht=0.52\paperheight,left]{sysucolorbox}
+            \end{beamercolorbox}
+        }
+        \put(10,-20){%
+            \begin{beamercolorbox}[wd=0.6\paperwidth,ht=0.52\paperheight,sep=2.0mm,left]{empty}
+                \usebeamerfont{title}\usebeamercolor[fg]{title}\inserttitle\par
+                \vspace{2.0mm}
+                \usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle\par
+                \vspace{6.0mm}
+                \usebeamercolor[fg]{white}
+                \insertauthor\par
+                \vspace{1.0mm}
+                \usebeamerfont{school}\insertinstitute\par
+                \vspace{1.0mm}
+                \usebeamerfont{date}\insertdate
+            \end{beamercolorbox}
+        }
+        \put(116,-45){
+            \begin{beamercolorbox}[wd=0.2\paperwidth,sep=6.0mm,center]{empty}
+                \includegraphics[height=0.8\paperheight]{\vertical}
+                \vspace{3.0mm}
+            \end{beamercolorbox}
+        }
+    \end{picture}
+}
+
+% titlepage setting
+\setbeamertemplate{title page}{
+    \setcounter{framenumber}{0}
+    \thispagestyle{empty}
+    \IfStrEq{\sysu@tpage}{1}{\tpage@normal}{%
+        \IfStrEq{\sysu@tpage}{2}{\tpage@goldensplit}{%
+            \IfStrEq{\sysu@tpage}{3}{\tpage@box}{%
+                \tpage@normal
+                \sysu@warning{Invalid titlepage option, set to defualt: '1'}
+            }
+        }
+    }
+}
+
+% frametitle setting
+\setbeamertemplate{frametitle}{
+    \begin{picture}(0,0)
+        \put(8,4){%
+            \begin{beamercolorbox}[wd=\paperwidth,ht=14.0mm,sep=1.0mm]{frametitle}%
+            \begin{minipage}[c][14.0mm][c]{\dimexpr\textwidth-0.5em}
+                \usebeamerfont{frametitle}\insertframetitle\par
+                \usebeamerfont{framesubtitle}\insertframesubtitle
+            \end{minipage}
+            \end{beamercolorbox}
+        }
+    \end{picture}
+}
+
+% headline setting
+\setbeamertemplate{headline}{
+    \begin{beamercolorbox}[wd=\paperwidth,ht=14.0mm,sep=2.0mm,right]{sysucolorbox}
+        \includegraphics[height=10.0mm]{\logo}
+    \end{beamercolorbox}
+}
+
+% footline setting
+\setbeamertemplate{footline}{%
+    \leavevmode%
+    \hbox{%
+        \begin{beamercolorbox}[wd=.2\paperwidth,ht=2.25ex,dp=1ex,left]{sysucolorbox}%
+            \hspace*{.025\paperwidth}\insertshortdate%
+        \end{beamercolorbox}%
+        \hskip-.01\paperwidth
+        \begin{beamercolorbox}[wd=.62\paperwidth,ht=2.25ex,dp=1ex,center]{sysucolorbox}%
+            \hypersetup{linkcolor=\fgcolor}\insertshorttitle%
+        \end{beamercolorbox}%
+        \hskip-.01\paperwidth
+        \begin{beamercolorbox}[wd=.2\paperwidth,ht=2.25ex,dp=1ex,right]{sysucolorbox}%
+        \ifnum\theframenumber=0\relax
+        \else
+            \insertframenumber/\inserttotalframenumber\hspace*{.025\paperwidth}%
+        \fi
+        \end{beamercolorbox}%
+        \unskip
+    }%
+    \vskip0pt%
+}
+
+% block setting
+\setbeamerfont{block title}{series=\centering, size=\small}
+\setbeamerfont{block body}{size=\scriptsize}
+
+% code lsiting setting
+\renewcommand\lstlistingname{Code}
+\renewcommand\lstlistingnamestyle{\tiny}
+\lstdefinestyle{codestyle}{
+    escapechar=|,
+    backgroundcolor=\color{\bgcolor!30},   
+    commentstyle=\color{\fgcolor!30!\bgcolor},
+    keywordstyle=\color{sysured},
+    numberstyle=\color{\bgcolor!30},
+    stringstyle=\color{darkgray},
+    basicstyle=\color{\themecolor}\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=t,
+    keepspaces=true,                 
+    numbers=left,
+    numbersep=1.0mm,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+\lstset{style=codestyle}
+
+% section page: table of contents setting
+\setcounter{tocdepth}{1}
+\AtBeginSection[]
+{
+    \begingroup
+    \begin{frame}{Contents}
+        \tableofcontents[currentsection]
+        \begin{picture}(0,0)
+            \put(80,16){%
+            \begin{beamercolorbox}[wd=0.38\paperwidth,center]{empty}
+                \includegraphics[width=0.38\paperwidth]{\motto}
+            \end{beamercolorbox}
+            }
+        \end{picture}
+    \end{frame}
+    \endgroup
+}
+\newcommand{\secsym}[1]{\def\@secsym{#1}}
+\secsym{$\S$}
+\setbeamertemplate{section in toc}{\usebeamercolor[fg]{toccolor}\@secsym~\hypersetup{linkcolor=\bgcolor}\inserttocsection}
+\setbeamertemplate{sections/subsections in toc shaded}[default][25]
+
+% others setting
+\setbeamertemplate{navigation symbols}{}
+\setlength{\parskip}{10pt}
+\setbeamertemplate{itemize item}{\textbullet}
+\setbeamertemplate{itemize subitem}{\ensuremath{\circ}}
+\captionsetup{labelformat=empty,font={small},justification=centering}
+\captionsetup[subfigure]{labelformat=empty,font={footnotesize},justification=centering}
+
+\newcommand{\backmatter}{
+\begingroup
+    \begin{frame}
+        \thispagestyle{empty}
+        \centering
+        \begin{minipage}{\textwidth}
+            \centering
+            \huge\inserttitle
+            \vspace{6.0mm}
+            \textit{\\Thank you! \\ Any questions?}
+        \end{minipage}
+    \end{frame}
+\endgroup
+}
