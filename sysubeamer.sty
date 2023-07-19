@@ -137,7 +137,6 @@
         \def\updown{logo/sysu_updown_white.png}
     \fi
 \fi
-\fi
 
 \setbeamercolor{title}{fg=\fgcolor}
 \setbeamercolor{frametitle}{fg=\fgcolor}
@@ -309,11 +308,12 @@
 }
 
 % footline setting
+\def\footlinecenter{\insertshorttitle}
 \setbeamertemplate{footline}{%
     \leavevmode%
     \hbox{%
         \begin{beamercolorbox}[wd=.2\paperwidth,ht=2.25ex,dp=1ex,left]{sysucolorbox}%
-            \hspace*{.025\paperwidth}\insertshortdate%
+            \hspace*{.025\paperwidth}\footlinecenter%
         \end{beamercolorbox}%
         \hskip-.01\paperwidth
         \begin{beamercolorbox}[wd=.62\paperwidth,ht=2.25ex,dp=1ex,center]{sysucolorbox}%
@@ -323,8 +323,10 @@
         \begin{beamercolorbox}[wd=.2\paperwidth,ht=2.25ex,dp=1ex,right]{sysucolorbox}%
         \ifnum\theframenumber=0\relax
         \else
-            \insertframenumber/\inserttotalframenumber\hspace*{.025\paperwidth}%
-        \fi
+            \ifnum\insertframenumber=\inserttotalframenumber\relax
+            \else
+            \insertframenumber/\the\numexpr\inserttotalframenumber-1\hspace*{.025\paperwidth}%
+        \fi\fi
         \end{beamercolorbox}%
         \unskip
     }%
@@ -376,9 +378,8 @@
     \end{frame}
     \endgroup
 }
-\newcommand{\secsym}[1]{\def\@secsym{#1}}
-\secsym{$\S$}
-\setbeamertemplate{section in toc}{\usebeamercolor[fg]{toccolor}\@secsym~\hypersetup{linkcolor=\bgcolor}\inserttocsection}
+\def\secsym{$\S$}
+\setbeamertemplate{section in toc}{\usebeamercolor[fg]{toccolor}\secsym~\hypersetup{linkcolor=\bgcolor}\inserttocsection}
 \setbeamertemplate{sections/subsections in toc shaded}[default][25]
 
 % others setting
